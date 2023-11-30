@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> Wac A Mole!</title>
+        <meta>
+        <meta>
+        <script>
+            alert("Prepare To WHACK A MOLE, or moles I should Say...");
+            var container= document.getElementById("container");
+            const blocks= document.getElementsByClassName("blocks");
+        </script>
+        <style>
+            .container{
+                background-color: #d9d9d9;
+                height: 100vh;
+            }
+            .blocks{
+                height: 120px;
+                width: 120px;
+                border: 5px black solid;
+                margin: 10px;
+                border-radius: 100%;
+                background-color: black;
+            }
+            .container-blocks1, .container-blocks2, .container-blocks3, .container-blocks4, .container-blocks5{
+                display: flex;
+                text-align: center;
+                width: fit-content;
+                width: moz-fit-content; /* for firefox support */
+                margin-left: auto;
+                margin-right: auto;
+                background-color: transparent;
+            }
+            .blocks:hover{
+                border-color: lightgreen;
+            }
+            .blocks:active{
+                border-color: lightcoral;
+                transform: scale(.95);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" id="container">
+            <div class="container-blocks1">
+                <div class="blocks" draggable="true" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+            </div>
+            <div class="container-blocks2">
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+            </div>
+            <div class="container-blocks3">
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+            </div>
+            <div class="container-blocks4">
+                <div class="blocks" draggable="true"></div>
+                <div class="blocks" draggable="true"></div>
+            </div>
+            <div class="container-blocks5">
+                <div class="blocks" draggable="true"></div>
+            </div>
+        </div>
+    </body>
+</html>
