@@ -5,14 +5,25 @@
         <meta>
         <meta>
         <script>
-            alert("Prepare To WHACK A MOLE, or moles I should Say...");
             var container= document.getElementById("container");
             const blocks= document.getElementsByClassName("blocks");
+
+            function play(){
+                for (let i=0; i<blocks.length; i++){
+                    blocks[i].addEventListener("click", function () {
+                        blocks[i].style.src="hammer.gif";
+                    });
+                    alert("Prepare To WHACK A MOLE, or moles I should Say...");
+                }
+                console.log(blocks[0]);
+            }
+            play();
+
         </script>
         <style>
             .container{
                 background-color: #d9d9d9;
-                height: 100vh;
+                height: fit-content
             }
             .blocks{
                 height: 120px;
@@ -38,6 +49,13 @@
                 border-color: lightcoral;
                 transform: scale(.95);
             }
+            @media only screen and (min-width: 600px) and (max-width: 960px) and (min-height: 337.5px) and (max-height: 540px) {
+    /* Styles for screens with a 16:9 aspect ratio and a minimum width of 600 pixels and a minimum height of 337.5 pixels */
+            .blocks, img {
+                height: 60px;
+                width: 60px;
+            }
+        }
         </style>
     </head>
     <body>

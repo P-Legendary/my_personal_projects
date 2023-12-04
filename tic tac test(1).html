@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tic Tac Tik Tak</title>
+        <script>
+            window.onload= e=>{
+                var connect3= {0:null, 1:null, 2:null};
+                const colors="aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgrey darkgreen dakkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskybluefirebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenroad gray grey green greenyellow honeydew hotpink indiared indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon light blue lightcoral lightcyan lightgoldenrodyellow lightgray lightgrey lightgreen lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightYellow lime limegreen linen magenta maroon mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen medium turquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldllace olive olivedrab orange orangered orchid palegoldenrod palegreen pale turquoise palevioletred papyawhip peachpuff peru pink plum powderblue purple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slategray slategrey snow springgreen steelbluetan teal thistle tomato turquiose violet wheat white whitesmoke yellow yellowgreen".split(" ");
+                const containerNodes= document.querySelectorAll(".container div");
+                var background=document.getElementById("background");
+                var body=document.querySelector("body");
+                var colorsIndex;
+                var counter=1;
+                var marks=0;
+
+                containerNodes.forEach( (item)=>{
+                    item.classList.add("container-card");
+                    item.addEventListener("click", whoWon);
+                    item.id=counter;
+                    counter++;
+                });
+                background.addEventListener("click",changeColor);
+                background.addEventListener("dblclick", (e)=>{
+                    body.style.background="white";
+                });
+                function addMark(containerNode){ // to keep track of the scores/entries
+                    if (marks%2==0)
+                        containerNode.innerHTML="X";
+                    else
+                        containerNode.innerHTML="O";
+                    marks++;
+                }
+            
+                function whoWon(){ // this is where all the code will live/be referenced, code that will check and highlight the winner if appllicable
+                    addMark(this);
+
+                    for (let i=0; i<3; i++){ // code to add and check columns
+                        try{
+                            connect3[0]=containerNodes[i].innerHTML;// this is the top column object
+                            connect3[1]=containerNodes[i+3].innerHTML;
+                            connect3[2]=containerNodes[i+6].innerHTML;
+                        }
+                        catch(err){ 
+                            console.log(typeof this.id );
+                        }
+                        if (match())
+                            showconnect3()
+                    }
+                    
+                    for (let i=0; i<9; i+=3){ // code to add and check rows
+                        try{
+                            connect3[0]=containerNodes[i].innerHTML;// this is the top row
+                            connect3[1]=containerNodes[i+1].innerHTML;
+                            connect3[2]=containerNodes[i+2].innerHTML;
+                        }
+                        catch(err){ 
+                            console.log(typeof this.id );
+                        }
+                        if (match())
+                            showconnect3()
+                    }
+                    
+                    for (let i=0; i<2; i++){
+                    // code to add and check diagnols
+                        let tracker=0;
+                        try{
+                            if (tracker%2==0){
+                                connect3[0]=containerNodes[0].innerHTML;// this is the diagnol
+                                connect3[1]=containerNodes[4].innerHTML;
+                                connect3[2]=containerNodes[8].innerHTML;
+                            }
+                            else
+                                {
+                                connect3[0]=containerNodes[2].innerHTML;// this is the diagnol
+                                connect3[1]=containerNodes[4].innerHTML;
+                                connect3[2]=containerNodes[6].innerHTML;
+
+                                }
+                            if (match())
+                                showconnect3()
+                                
+                        }
+                        
+                        catch(err){ 
+                            console.log(typeof this.id );
+                        }
+                        
+                    }
+                    console.log(connect3);
+                }
+                function showconnect3(){ // if someone won; this will show the winning boxes, it will highlight it in green, the border that is.
+                    try{
+                        for (let i=0; i<connect3.length; i++)
+                            connect3[i].style.cssText="border:solid green 10px !important;";
+                            if (connect3[0]=="X")
+                                alert("The WINNER! is Player 1!");
+                            if (connect3[2]=="O")
+                                alert("The WINNER! is Player 2!");
+                        }
+
+                    catch(err){
+
+                    }
+                
+                }
+                function match(){ // will check the connect3 variable to see if all three signs match
+                    try{
+                        if (connect3[0]==connect3[2] & connect3[1]==connect3[2])
+                            return true;
+                        return false;
+                    }
+                    catch(error){}
+                }
+
+
+                function changeColor(){ // this is just for the background color
+                    if (colorsIndex<colors.length){
+                        body.style.background=colors[colorsIndex];
+                        colorsIndex++;
+                    }
+                    else
+                        colorsIndex=0;
+                }
+                //console.log(colors);
+                
+            }
+            </script>
+        <style>
+            body{
+                position: relative;
+                text-align: center; 
+            }
+            .container {
+                position: relative;
+                display: grid;
+                grid-template-columns: auto auto auto;
+                width: fit-content;
+                margin:auto; 
+                box-shadow: -20px 10px 5px 5px gray;    
+                background-color: aquamarine;
+            }
+            .container-card{
+                border: 5px solid black;
+                width: 200px;
+                height: 200px;
+                font-size: 100px;
+                transition: .25s ease-in;
+                text-align: center;
+            }
+            .container-card:hover{
+                border: dotted green 10px;
+            }
+            .top-left{
+                border-top: solid 5px white;;
+                border-left: solid 5px white;;
+            }
+            .top-right{
+                border-top: solid 5px white;;
+                border-right: solid 5px white;;
+            }
+            .middle-left{
+                border-left: solid 5px white;;
+            }
+            .middle-right{
+                border-right: solid 5px white;;
+            }
+            .bottom-middle{
+                border-bottom: 5px solid white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" >
+            <div class="top-left"></div>
+            <div class="top-middle"></div>
+            <div class="top-right"></div>
+            <div class="middle-left"></div>
+            <div class="middle-middle"></div>
+            <div class="middle-right"></div>
+            <div class="bottom-left"></div>
+            <div class="bottom-middle"></div>
+            <div class="bottom-right"></div>
+        </div>
+        <button id="background" style="margin-top:100px; scale: 3;">Background</button>
+    </body>
+</html>
