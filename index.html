@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whac A Mole!</title>
+    <style>
+        :root {
+            --shake-effect: 5px;
+        }
+        @keyframes shake {
+            from { transform: translate(0, 0); }
+            25% { transform: translate(var(--shake-effect), 0); }
+            50% { transform: translate(0, 0); }
+            75% { transform: translate(-var(--shake-effect), 0); }
+            to { transform: translate(0, 0); }
+        }
+        .shake-screen {
+            position: relative;
+            animation: shake 0.25s ease-in-out 1 alternate-reverse;
+        }
+        .show-mole-hard {
+            background: url("mole2.gif");
+            background-size: cover;
+        }
+        .show-mole-easy {
+            background: url("mole.gif");
+            background-size: cover;
+        }
+        .hide {
+            display: none !important;
+        }
+        .show{display: block !important;}
+        .reveal {
+            display: block;
+        }
+        #cog:hover{
+            background-color: gold;
+        }
+        #menu{
+            color: blue;
+            display: none;
+        }
+        #play {
+            background: url("mole.gif");
+            background-size: cover;
+            left: 47.5%;
+            position: relative;
+            color: white;
+        }
+        #easy, #hard, #play {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            width: fit-content;
+            height: fit-content;
+            border: solid black 1px;
+            padding: 10px;
+        }
+        #easy:hover, #hard:hover, #play:hover {
+            opacity: .50;
+        }
+        #easy, #hard {
+            display: none;
+        }
+        #score {
+            width: 50px;
+            margin: 30px;
+            font-size: larger;
+        }
+        .score {
+            display: flex;
+            margin: 20px;
+            width: fit-content;
+            float: right;
+            position: relative;
+        }
+        #easy {
+            background-color: greenyellow;
+        }
+        #hard {
+            background-color: red;
+        }
+        .container {
+            background-color: #d9d9d9;
+            height: fit-content;
+        }
+        .blocks {
+            height: 120px;
+            width: 120px;
+            border: 5px black solid;
+            margin: 10px;
+            border-radius: 100%;
+            background-color: black;
+        }
+        .hammer {
+            background: url("hammer.gif");
+            background-size: cover;
+        }
+        .container-blocks1, .container-blocks2, .container-blocks3, .container-blocks4, .container-blocks5 {
+            display: flex;
+            text-align: center;
+            width: fit-content;
+            width: -moz-fit-content; /* For Firefox support */
+            margin-left: auto;
+            margin-right: auto;
+            background-color: transparent;
+        }
+        .blocks:hover {
+            border-color: rgb(71, 9, 243);
+        }
+        .blocks:active {
+            border-color: lightcoral;
+            transform: scale(0.95);
+        }
+        @media only screen and (min-width: 600px) {
+            .blocks, img {
+                height: 60px;
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="settings"> 
+        <img id="cog" src="cog.png" alt=""> 
+        <div id="menu">
+            <a href="./wacAmole.html">Main Menu</a>
+        </div>
+    </div>
+    <div class="container" id="container">
+        <div class="container-blocks1">
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+        </div>
+        <div class="container-blocks2">
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+        </div>
+        <div class="container-blocks3">
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+        </div>
+        <div class="container-blocks4">
+            <div class="blocks" draggable="true"></div>
+            <div class="blocks" draggable="true"></div>
+        </div>
+        <div class="container-blocks5">
+            <div class="blocks" draggable="true"></div>
+        </div>
+    </div>
+    <button id="play">Play</button>
+    <div id="easy">Easy</div>
+    <div id="hard">Hard</div>
+    <div class="score">
+        <div style="font-size: xx-large;">Score</div>
+        <div id="score">0</div>
+    </div>
+
+    <script>
+        var nodeBlocks = document.querySelectorAll(".blocks");
+        var containerBlock = document.getElementById("container");
+        var easyNode = document.getElementById("easy");
+        var hardNode = document.getElementById("hard");
+        var playNode = document.getElementById("play");
+        var score = document.getElementById("score");
+        var cog= document.getElementById("cog");
+        var hits = 0;
+        const  hammerSound= new Audio("hammersound.mp3");
+
+        cog.addEventListener("click", ()=>{document.getElementById("menu").classList.toggle("show")});
+        easyNode.addEventListener("click", function() {
+            hardNode.classList.add("hide");
+            easyNode.classList.add("hide");
+            showMoleEasy();
+        });
+
+        hardNode.addEventListener("click", function() {
+            hardNode.classList.add("hide");
+            easyNode.classList.add("hide");
+            showMoleHard();
+        });
+
+        playNode.addEventListener("click", function() {
+            hardNode.style.display = "block";
+            easyNode.style.display = "block";
+            playNode.classList.add("hide");
+        });
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function showMoleHard() {
+            var indexedNode = getRandomBlock();
+            indexedNode.classList.add("show-mole-hard");
+
+            setTimeout(() => {
+                indexedNode.classList.remove("show-mole-hard");
+                setTimeout(showMoleHard, getRandomInt(100, 1000));
+            }, 250);
+        }
+
+        function showMoleEasy() {
+            var indexedNode = getRandomBlock();
+            indexedNode.classList.add("show-mole-easy");
+
+            setTimeout(() => {
+                indexedNode.classList.remove("show-mole-easy");
+                setTimeout(showMoleEasy, getRandomInt(1000, 3000));
+            }, 1000);
+        }
+
+        function getRandomBlock() {
+            var randomIndex = getRandomInt(0, nodeBlocks.length - 1);
+            return nodeBlocks[randomIndex];
+        }
+
+        for (let i = 0; i < nodeBlocks.length; i++) {
+            nodeBlocks[i].addEventListener("click", function() {
+                nodeBlocks[i].classList.add("hammer");
+                nodeBlocks[i].parentElement.classList.toggle("shake-screen");
+                hammerSound.play();
+                if (hits % 5 === 0) {
+                    containerBlock.classList.toggle("shake-screen");
+                }
+                if (this.classList.contains("show-mole-easy") || this.classList.contains("show-mole-hard")) {
+                    score.innerText = parseInt(score.innerText) + 1;
+                    hits++;
+                    console.log(hits);
+                }
+                setTimeout(() => {
+                    this.classList.remove("hammer");
+                }, 500);
+            });
+        }
+        
+    </script>
+</body>
+</html>
